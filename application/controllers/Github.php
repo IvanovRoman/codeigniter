@@ -78,33 +78,4 @@
       echo json_encode($output);
       exit;
     }
-
-    public function view($slug = 'search')
-    {
-      $data['title'] = 'Github Repository';
-      $this->load->view('templates/header', $data);
-      $this->load->view('github/search', $data);
-      $this->load->view('templates/footer');
-    }
-
-    public function search()
-    {
-      $this->load->helper(array('form', 'url'));
-      $this->load->library('form_validation');
-      $data['title'] = 'Create a search item';
-      $this->form_validation->set_rules('title', 'Title', 'required');
-      $this->form_validation->set_rules('text', 'Text', 'required');
-      if ($this->form_validation->run() === FALSE)
-      {
-        $this->load->view('templates/header', $data);
-        $this->load->view('github/search');
-        $this->load->view('templates/footer');
-      }
-      else
-      {
-        $this->load->view('templates/header', $data);
-        $this->load->view('news/success');
-        $this->load->view('templates/footer');
-      }
-    }
   }
