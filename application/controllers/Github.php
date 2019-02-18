@@ -20,72 +20,73 @@
       redirect('Github/loadRecord');
     }
 
-    public function loadRecord($page = 0, $sortBy = "id", $order = "asc") {
-     
-      // Set session 
-      if ($this->uri->segment('4') != NULL) {
-        $this->session->set_userdata(array("sortBy" => $sortBy));
-        $this->session->set_userdata(array("order" => $order));
-      } else {
-        if ($this->session->userdata('sortBy') != NULL) {
-          $sortBy = $this->session->userdata('sortBy');
-          $order = $this->session->userdata('order');
-        }
-      }
+    public function loadRecord() {
 
-      $fileNames = $this->getData();
-      // Row per page
-      $perPage = 3;
-      $offset =  ($page - 1) + 1; // ($page - 1) * $perPage;
-      
-      $paginatedFiles = array();
-
-      if (count($fileNames)) {
-        $paginatedFiles = array_slice($fileNames, $offset, $perPage, true);
-      }
-
-      usort($paginatedFiles, function ($one, $two) {
-        if ($one['file'] === $two['file']) {
-            return 0;
-        }
-        return $one['file'] < $two['file'] ? -1 : 1;
-      });
-
-      $data['nameFiles'] = $paginatedFiles; 
-      
-      // Pagination Configuration
-      $config['base_url'] = base_url().'index.php/github/loadRecord';
-      $config['user_page_numbers'] = TRUE;
-      $config['total_rows'] = count($fileNames);
-      $config['per_page'] = $perPage;
-
-      // Initialize
-      $this->pagination->initialize($config);
-
-      $data['pagination'] = $this->pagination->create_links();
-      $data['row'] = $offset;
-      $data['order'] = $order;
-
-      $this->load->helper(array('form', 'url'));
+      $this->load->helper(array('form'));
       $this->load->library('form_validation');
-      
-      $this->form_validation->set_rules('url', 'Url', 'required');
-      $this->form_validation->set_rules('start', 'Start', 'required');
-      $this->form_validation->set_rules('end', 'End', 'required');
-      
+
+      $this->form_validation->set_rules('url-commit', 'Url Commit', 'required');
+      $this->form_validation->set_rules('start-date', 'Start Date', 'required');
+      $this->form_validation->set_rules('end-date', 'End Date', 'required');
+                
+
       if ($this->form_validation->run() == FALSE)
       {
-        // Load view
-        $this->load->view('github/postView', $data);
+        $this->load->view('templates/header');
+        $this->load->view('github/formView');
       }
       else
       {
-        $urlRepositry = $this->input->post_get('url', true);
-        $start = $this->input->post_get('start', true);
-        $end = $this->input->post_get('end', true);
-
-        $this->load->view('github/postView', $data);
+        // Load view
+        if ($this->getData() != array()) {
+          $this->load->view('templates/header');
+          $this->load->view('github/formView');
+          $this->load->view('github/postView');
+        }
       }
+    }
+
+    public function get_commits() {
+      $draw = intval($this->input->get("draw"));
+      $start = intval($this->input->get("start"));
+      $length = intval($this->input->get("length"));
+
+      $fileNames = $this->getData();
+      
+      $data = array();
+
+      foreach ($fileNames as $file => $value) {
+
+        $authors = "";
+        $countCommits = 0;
+        foreach ($value as $key => $value) {
+          $authors .= $key.": ".$value." ";
+          $countCommits += $value;
+        }
+
+        $data[] = array(
+          $file,
+          $countCommits,
+          $authors
+        );
+
+      }
+
+      // $dat = array (
+      //   array('Fil1', 3, 'Fil1 Fil1 Fil1'),
+      //   array('Fil2', 4, 'Fil1'),
+      //   array('Fil3', 3, "Fil1")
+      // );
+
+      $output = array(
+        "draw" => $draw,
+        "recordsTotal" => count($fileNames),
+        "recordsFiltered" => count($fileNames),
+        "data" => $data
+      );
+
+      echo json_encode($output);
+      exit;
     }
 
     public function view($slug = 'search')
