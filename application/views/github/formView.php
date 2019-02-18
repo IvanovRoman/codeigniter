@@ -10,7 +10,7 @@
   </div>
   <div class="form-group">
       <label for="text" class="control-label col-sm-1">Начало даты</label>
-      <div class="col-sm-10"><input type="date" name="start-date" id="start-date" class="form-control" value="2019-01-25" placeholder="Начало периода"/></div>
+      <div class="col-sm-10"><input type="date" name="start-date" id="start-date" class="form-control" value="2019-01-30" placeholder="Начало периода"/></div>
   </div>
   <div class="form-group">
       <label for="text" class="control-label col-sm-1">Конец даты</label>

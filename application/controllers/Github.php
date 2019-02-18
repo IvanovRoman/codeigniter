@@ -8,12 +8,6 @@
     public function __construct() {
       parent::__construct();
       $this->load->helper('url');
-      // Load session
-      $this->load->library('session');
-      // Load Pagination library
-      $this->load->library('pagination');
-      // Load Main model
-      $this->load->model('Main_model');
     }
 
     public function index() {
@@ -37,10 +31,12 @@
       }
       else
       {
+        $this->load->view('templates/header');
+        $this->load->view('github/formView');
+        
         // Load view
-        if ($this->getData() != array()) {
-          $this->load->view('templates/header');
-          $this->load->view('github/formView');
+        if ($this->getData() != array()) 
+        {
           $this->load->view('github/postView');
         }
       }
@@ -71,12 +67,6 @@
         );
 
       }
-
-      // $dat = array (
-      //   array('Fil1', 3, 'Fil1 Fil1 Fil1'),
-      //   array('Fil2', 4, 'Fil1'),
-      //   array('Fil3', 3, "Fil1")
-      // );
 
       $output = array(
         "draw" => $draw,

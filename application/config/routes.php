@@ -58,7 +58,3 @@ $route['github'] = 'github/search';
 $route['github/index'] = 'github/index';
 
 $route['githubapi/index'] = 'github/getData';
-// $route['default_controller'] = 'news/index';
-// $route['news/create'] = 'news/create';
-// $route['news/(:any)'] = 'news/view/$1';
-// $route['news'] = 'news';

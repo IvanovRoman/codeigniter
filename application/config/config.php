@@ -25,8 +25,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $config['base_url'] = 'http://localhost/codeigniter';
 
-$config['client_id'] = '7ab05be52ef22a1d496e';
-$config['client_secret'] = '6439baa8c6d2df25835c532beba14e7de94a7698';
+$config['client_id'] = 'xxx';
+$config['client_secret'] = 'xxx';
 
 /*
 |--------------------------------------------------------------------------
